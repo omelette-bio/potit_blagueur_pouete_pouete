@@ -17,6 +17,13 @@ async def blague_beauf(ctx):
    await ctx.send(blague.joke)
    await ctx.send(blague.answer + " :rofl:")
 
+@bot.command(name='humour_noir')
+async def humour_noir(ctx):
+   blague = await blagues.random_categorized(BlagueType.LIMIT)
+   await ctx.send(blague.joke)
+   await ctx.send(blague.answer + " :rofl:")
+
+
 @bot.event
 async def on_message(message):
    if message.author == bot.user:
