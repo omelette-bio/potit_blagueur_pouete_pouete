@@ -65,6 +65,22 @@ async def humour_noir(ctx):
       await ctx.send(blague.answer + random.choice(emojis))
 
 
+# commande qui permet de changer le mode du bot, de dev à public et vice versa
+@bot.command(name='toggle_dev')
+async def toggle_dev(ctx):
+   # si l'utilisateur a le role "dev", on change le mode du bot
+   if 'dev' in [role.name.lower() for role in ctx.author.roles]:
+      if args.mode == 1:
+         args.mode = 2
+         await ctx.send("le bot est maintenant en mode public")
+      else:
+         args.mode = 1
+         await ctx.send("le bot est maintenant en mode dev")
+   # sinon, on ne fait rien
+   else:
+      await ctx.send("tu n'as pas le droit de faire ça, t'es pas dev :smiling_face_with_tear:")
+
+
 # commande qui affiche la liste des commandes
 @bot.command(name='help')
 async def help(ctx):
