@@ -2,6 +2,7 @@ import os, discord, random, argparse
 from blagues_api import BlaguesAPI, BlagueType
 from discord.ext import commands
 from dotenv import load_dotenv
+import data
 
 # récupère le mode de lancement du bot
 parser = argparse.ArgumentParser()
@@ -19,15 +20,6 @@ bot = commands.Bot(command_prefix='/', intents=intents, help_command=None)
 
 # initialise l'API de blagues
 blagues = BlaguesAPI(os.getenv('BLAGUES_API_TOKEN'))
-
-# initialise les variables du bot qui vont lui permettre de répondre à certains messages
-# on ira chercher les réponses dans une liste, pour pouvoir facilement en ajouter ou en supprimer
-possible_quoi = ['quoi', 'quoi ?', 'quoi?', 'quoient', 'quoient ?', 'quoient?', 'Quoi', 'Quoi ?', 'Quoi?', 'Quoient', 'Quoient ?', 'Quoient?']
-answers_quoi = ['feur','feuse','fure','drilatère','driceps','chi']
-
-possible_qui = ['qui', 'qui ?', 'qui?', 'ki', 'ki ?', 'ki?', 'Qui', 'Qui ?', 'Qui?', 'Ki', 'Ki ?', 'Ki?']
-emojis = [" :rofl:"," :sunglasses:", " :fire:", " :joy:"]
-cmds = {"/blague_beauf": "renvoie une blague beauf", "/humour_noir": "renvoie une blague humour noir", "/help": "renvoie la liste des commandes"}
 
 
 # display a message when the bot is ready and indicate the mode of the bot
@@ -49,7 +41,7 @@ async def blague_beauf(ctx):
    else:
       blague = await blagues.random_categorized(BlagueType.BEAUF)
       await ctx.send(blague.joke)
-      await ctx.send(blague.answer + random.choice(emojis))
+      await ctx.send(blague.answer + random.choice(data.emojis))
 
 
 # commande qui affiche une blague humour noir
@@ -62,7 +54,7 @@ async def humour_noir(ctx):
    else:
       blague = await blagues.random_categorized(BlagueType.LIMIT)
       await ctx.send(blague.joke)
-      await ctx.send(blague.answer + random.choice(emojis))
+      await ctx.send(blague.answer + random.choice(data.emojis))
 
 
 # commande qui permet de changer le mode du bot, de dev à public et vice versa
@@ -91,8 +83,8 @@ async def help(ctx):
    else:
       # construit la liste des commandes avec leur description grâce à la variable cmds
       msg = "```bonjour, je suis un potit blagueur, voici la liste des commandes que je connais :\n"
-      for cmd in cmds:
-         msg += cmd + " : " + cmds[cmd] + "\n"
+      for cmd in data.cmds:
+         msg += cmd + " : " + data.cmds[cmd] + "\n"
       msg += "je connais aussi d'autres choses mais je ne vais rien dévoiler ;)```"
       await ctx.send(msg)
 
@@ -105,16 +97,16 @@ async def on_message(message):
          return
    
    # regarde si le message fini par un des mots de la liste possible_quoi
-   for i in possible_quoi:
+   for i in data.possible_quoi:
       if message.content.endswith(i):
          # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
          # sinon, le bot répond
-         await message.channel.send(random.choice(answers_quoi))
+         await message.channel.send(random.choice(data.answers_quoi))
    
    # regarde si le message fini par un des mots de la liste possible_qui
-   for i in possible_qui:
+   for i in data.possible_qui:
       if message.content.endswith(i):
          # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
