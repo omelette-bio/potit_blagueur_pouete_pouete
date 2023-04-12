@@ -103,7 +103,7 @@ async def on_message(message):
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
          # sinon, le bot répond
-         await message.channel.send(random.choice(data.answers_quoi))
+         await message.reply(random.choice(data.answers_quoi))
    
    # regarde si le message fini par un des mots de la liste possible_qui
    for i in data.possible_qui:
@@ -112,7 +112,7 @@ async def on_message(message):
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
          # sinon, le bot répond
-         await message.channel.send('quette')
+         await message.reply('quette')
 
    # regarde si le message est une commande
    await bot.process_commands(message)
