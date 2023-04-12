@@ -1,7 +1,7 @@
 {
-  "possible_quoi": ["quoi", "quoi ?", "quoi?", "quoient", "quoient ?", "quoient?", "Quoi", "Quoi ?", "Quoi?", "Quoient", "Quoient ?", "Quoient?"],
-  "answers_quoi": ["feur", "feuse", "fure", "drilatère", "driceps", "chi","quoicoubeh"],
-  "possible_qui": ["qui", "qui ?", "qui?", "ki", "ki ?", "ki?", "Qui", "Qui ?", "Qui?", "Ki", "Ki ?", "Ki?"],
+  "possible_quoi": ["quoi", "quoi ?", "quoi?", "quoient", "quoient ?", "quoient?"],
+  "answers_quoi": ["feur", "feuse", "fure", "drilatère", "driceps","quoicoubeh"],
+  "possible_qui": ["qui", "qui ?", "qui?", "ki", "ki ?", "ki?"],
   "emojis": [":rofl:", " :sunglasses:", " :fire:", " :joy:", " :joy_cat:", " :see_no_evil:", " :zanny_face:"],
   "cmds": {
     "/blague_beauf": "renvoie une blague beauf",
