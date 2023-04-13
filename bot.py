@@ -142,6 +142,10 @@ async def on_message(message):
          await message.add_reaction('🙀')
          await message.reply("masterclass akhy :joy_cat:")
 
+   for ans in data['formulations']:
+      if ans in message.content.lower():
+         await message.reply(data["formulations"][ans] + " :joy_cat:")
+   
    # regarde si le message est une commande
    await bot.process_commands(message)
 

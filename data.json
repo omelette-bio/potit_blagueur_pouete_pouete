@@ -4,7 +4,10 @@
   "possible_qui": ["qui", "qui ?", "qui?", "ki", "ki ?", "ki?"],
   "possible_hein": ["hein", "hein ?", "hein?"],
   "answers_hein": ["deux, prends ta bite et fait un noeud", "deux", "deux, déshabille-toi et suce ma queue"],
-  "emojis": [":rofl:", " :sunglasses:", " :fire:", " :joy:", " :joy_cat:", " :see_no_evil:", " :zanny_face:"],
+  "emojis": [":rofl:", " :sunglasses:", " :fire:", " :joy:", " :joy_cat:", " :see_no_evil:", " :zany_face:"],
+  "formulations": {
+    "c'est quoi ça": "c'est feur ça"
+  },
   "cmds": {
     "/blague_beauf": "renvoie une blague beauf",
     "/humour_noir": "renvoie une blague humour noir",
