@@ -122,6 +122,14 @@ async def on_message(message):
          # sinon, le bot répond
          await message.reply('quette :joy_cat:')
    
+   for i in data["possible_hein"]:
+      if message.content.lower().endswith(i):
+         # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
+         if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
+            return
+         # sinon, le bot répond
+         await message.reply(random.choice(data['answers_hein']) + ' :joy_cat:')
+   
    #check if a message contain "feur" and send a message
    for i in data['answers_quoi']:
       if i in message.content.lower():
@@ -131,7 +139,7 @@ async def on_message(message):
          # sinon, le bot répond
          # await message.add_reaction(':joy_cat:')
          # assuming you have a message object named 'message'
-         await message.add_reaction('😱')
+         await message.add_reaction('🙀')
          await message.reply("masterclass akhy :joy_cat:")
 
    # regarde si le message est une commande

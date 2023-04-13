@@ -2,6 +2,8 @@
   "possible_quoi": ["quoi", "quoi ?", "quoi?", "quoient", "quoient ?", "quoient?"],
   "answers_quoi": ["feur", "feuse", "fure", "drilatère", "driceps","quoicoubeh"],
   "possible_qui": ["qui", "qui ?", "qui?", "ki", "ki ?", "ki?"],
+  "possible_hein": ["hein", "hein ?", "hein?"],
+  "answers_hein": ["deux, prends ta bite et fait un noeud", "deux", "deux, déshabille-toi et suce ma queue"],
   "emojis": [":rofl:", " :sunglasses:", " :fire:", " :joy:", " :joy_cat:", " :see_no_evil:", " :zanny_face:"],
   "cmds": {
     "/blague_beauf": "renvoie une blague beauf",
