@@ -121,6 +121,7 @@ async def on_message(message):
             return
          # sinon, le bot répond
          await message.reply(random.choice(data['answers_quoi']) + " :joy_cat:")
+         return # on sort de la fonction pour éviter que le bot réponde deux fois
       elif len(msg)>1:
          if i in msg[-2] and all_char_punct(msg[-1]):
             # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
@@ -128,7 +129,8 @@ async def on_message(message):
                return
             # sinon, le bot répond
             await message.reply(random.choice(data['answers_quoi']) + " :joy_cat:")
-   
+            return # on sort de la fonction pour éviter que le bot réponde deux fois
+
    # regarde si le message fini par un des mots de la liste possible_qui
    for i in data['possible_qui']:
       if i in msg[-1]:
@@ -137,6 +139,7 @@ async def on_message(message):
             return
          # sinon, le bot répond
          await message.reply('quette :joy_cat:')
+         return # on sort de la fonction pour éviter que le bot réponde deux fois
       elif len(msg)>1:
          if i in msg[-2] and all_char_punct(msg[-1]):
             # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
@@ -144,6 +147,7 @@ async def on_message(message):
                return
             # sinon, le bot répond
             await message.reply('quette :joy_cat:')
+            return # on sort de la fonction pour éviter que le bot réponde deux fois
       
    for i in data["possible_hein"]:
       if i in msg[-1]:
@@ -152,6 +156,7 @@ async def on_message(message):
             return
          # sinon, le bot répond
          await message.reply(random.choice(data['answers_hein']) + ' :joy_cat:')
+         return # on sort de la fonction pour éviter que le bot réponde deux fois
       elif len(msg)>1:
          if i in msg[-2] and all_char_punct(msg[-1]):
             # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
@@ -159,6 +164,7 @@ async def on_message(message):
                return
             # sinon, le bot répond
             await message.reply(random.choice(data['answers_hein']) + ' :joy_cat:')
+            return # on sort de la fonction pour éviter que le bot réponde deux fois
    
    #check if a message contain "feur" and send a message
    for i in data['answers_quoi']:
@@ -171,10 +177,12 @@ async def on_message(message):
          # assuming you have a message object named 'message'
          await message.add_reaction('🙀')
          await message.reply("masterclass akhy :joy_cat:")
+         return # on sort de la fonction pour éviter que le bot réponde deux fois
 
    for ans in data['formulations']:
       if ans in message.content.lower():
          await message.reply(data["formulations"][ans] + " :joy_cat:")
+         return # on sort de la fonction pour éviter que le bot réponde deux fois
    
    # regarde si le message est une commande
    await bot.process_commands(message)
