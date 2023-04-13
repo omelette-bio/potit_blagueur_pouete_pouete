@@ -29,6 +29,13 @@ bot = commands.Bot(command_prefix='/', intents=intents, help_command=None)
 # initialise l'API de blagues
 blagues = BlaguesAPI(os.getenv('BLAGUES_API_TOKEN'))
 
+# function to check if all characters in a string are punctuation
+def all_char_punct(str):
+   all = True
+   for i in str:
+      if i not in data['punct']:
+         all = False
+   return all
 
 # display a message when the bot is ready and indicate the mode of the bot
 @bot.event
@@ -104,31 +111,54 @@ async def on_message(message):
    if message.author == bot.user:
          return
    
+   msg = message.content.lower().split(" ")
+   
    # regarde si le message fini par un des mots de la liste possible_quoi
    for i in data['possible_quoi']:
-      if message.content.lower().endswith(i):
+      if i in msg[-1]:
          # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
          # sinon, le bot répond
          await message.reply(random.choice(data['answers_quoi']) + " :joy_cat:")
+      elif len(msg)>1:
+         if i in msg[-2] and all_char_punct(msg[-1]):
+            # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
+            if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
+               return
+            # sinon, le bot répond
+            await message.reply(random.choice(data['answers_quoi']) + " :joy_cat:")
    
    # regarde si le message fini par un des mots de la liste possible_qui
    for i in data['possible_qui']:
-      if message.content.lower().endswith(i):
+      if i in msg[-1]:
          # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
          # sinon, le bot répond
          await message.reply('quette :joy_cat:')
-   
+      elif len(msg)>1:
+         if i in msg[-2] and all_char_punct(msg[-1]):
+            # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
+            if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
+               return
+            # sinon, le bot répond
+            await message.reply('quette :joy_cat:')
+      
    for i in data["possible_hein"]:
-      if message.content.lower().endswith(i):
+      if i in msg[-1]:
          # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
          # sinon, le bot répond
          await message.reply(random.choice(data['answers_hein']) + ' :joy_cat:')
+      elif len(msg)>1:
+         if i in msg[-2] and all_char_punct(msg[-1]):
+            # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
+            if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
+               return
+            # sinon, le bot répond
+            await message.reply(random.choice(data['answers_hein']) + ' :joy_cat:')
    
    #check if a message contain "feur" and send a message
    for i in data['answers_quoi']:
