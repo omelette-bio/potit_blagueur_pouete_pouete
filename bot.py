@@ -111,6 +111,11 @@ async def on_message(message):
    if message.author == bot.user:
          return
    
+   for ans in data['formulations']:
+      if ans in message.content.lower():
+         await message.reply(data["formulations"][ans] + " :joy_cat:")
+         return # on sort de la fonction pour éviter que le bot réponde deux fois
+   
    msg = message.content.lower().split(" ")
    
    # regarde si le message fini par un des mots de la liste possible_quoi
@@ -179,10 +184,6 @@ async def on_message(message):
          await message.reply("masterclass akhy :joy_cat:")
          return # on sort de la fonction pour éviter que le bot réponde deux fois
 
-   for ans in data['formulations']:
-      if ans in message.content.lower():
-         await message.reply(data["formulations"][ans] + " :joy_cat:")
-         return # on sort de la fonction pour éviter que le bot réponde deux fois
    
    # regarde si le message est une commande
    await bot.process_commands(message)
