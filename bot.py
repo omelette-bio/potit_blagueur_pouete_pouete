@@ -91,10 +91,10 @@ async def toggle_dev(ctx):
    if 'dev' in [role.name.lower() for role in ctx.author.roles]:
       if args.mode == 1:
          args.mode = 2
-         await ctx.send("le bot est maintenant en mode public")
+         await ctx.send("> le bot est maintenant en mode public")
       else:
          args.mode = 1
-         await ctx.send("le bot est maintenant en mode dev")
+         await ctx.send("> le bot est maintenant en mode dev")
    # sinon, on ne fait rien
    else:
       await ctx.send("tu n'as pas le droit de faire ça, t'es pas dev :joy_cat:")
