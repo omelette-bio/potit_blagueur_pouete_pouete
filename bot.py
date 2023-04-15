@@ -60,7 +60,7 @@ async def blague_beauf(ctx):
 
 
 # commande qui affiche une blague humour noir
-@bot.command(name='humour_noir')
+@bot.command(name='limite_limite')
 async def humour_noir(ctx):
    # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
    if 'dev' not in [role.name.lower() for role in ctx.author.roles] and args.mode == 1:
@@ -68,6 +68,18 @@ async def humour_noir(ctx):
    # sinon, le bot répond
    else:
       blague = await blagues.random_categorized(BlagueType.LIMIT)
+      await ctx.send(blague.joke)
+      await ctx.send(blague.answer + random.choice(data['emojis']))
+
+# commande qui affiche une blague humour noir
+@bot.command(name='humour_noir')
+async def humour_noir(ctx):
+   # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
+   if 'dev' not in [role.name.lower() for role in ctx.author.roles] and args.mode == 1:
+      await ctx.send("le bot est en dev mode sorry :(")
+   # sinon, le bot répond
+   else:
+      blague = await blagues.random_categorized(BlagueType.DARK)
       await ctx.send(blague.joke)
       await ctx.send(blague.answer + random.choice(data['emojis']))
 
@@ -107,14 +119,19 @@ async def help(ctx):
 # partie qui permet au bot de répondre à certains messages
 @bot.event
 async def on_message(message):
+   quoi = False
+   qui = False
+   hein = False
+   feur = False
+   
    # n'envoie pas de message si le message est envoyé par le bot (évite les boucles infinies)
    if message.author == bot.user:
          return
    
    for ans in data['formulations']:
       if ans in message.content.lower():
-         await message.reply(data["formulations"][ans] + " :joy_cat:")
-         return # on sort de la fonction pour éviter que le bot réponde deux fois
+         await message.reply(random.choice(data['formulations'][ans]) + " :joy_cat:")
+         return
    
    msg = message.content.lower().split(" ")
    
@@ -124,17 +141,13 @@ async def on_message(message):
          # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
-         # sinon, le bot répond
-         await message.reply(random.choice(data['answers_quoi']) + " :joy_cat:")
-         return # on sort de la fonction pour éviter que le bot réponde deux fois
+         quoi = True
       elif len(msg)>1:
          if i in msg[-2] and all_char_punct(msg[-1]):
             # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
             if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
                return
-            # sinon, le bot répond
-            await message.reply(random.choice(data['answers_quoi']) + " :joy_cat:")
-            return # on sort de la fonction pour éviter que le bot réponde deux fois
+            quoi = True
 
    # regarde si le message fini par un des mots de la liste possible_qui
    for i in data['possible_qui']:
@@ -142,34 +155,26 @@ async def on_message(message):
          # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
-         # sinon, le bot répond
-         await message.reply('quette :joy_cat:')
-         return # on sort de la fonction pour éviter que le bot réponde deux fois
+         qui = True
       elif len(msg)>1:
          if i in msg[-2] and all_char_punct(msg[-1]):
             # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
             if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
                return
-            # sinon, le bot répond
-            await message.reply('quette :joy_cat:')
-            return # on sort de la fonction pour éviter que le bot réponde deux fois
+            qui = True
       
    for i in data["possible_hein"]:
       if i in msg[-1]:
          # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
-         # sinon, le bot répond
-         await message.reply(random.choice(data['answers_hein']) + ' :joy_cat:')
-         return # on sort de la fonction pour éviter que le bot réponde deux fois
+         hein = True
       elif len(msg)>1:
          if i in msg[-2] and all_char_punct(msg[-1]):
             # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
             if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
                return
-            # sinon, le bot répond
-            await message.reply(random.choice(data['answers_hein']) + ' :joy_cat:')
-            return # on sort de la fonction pour éviter que le bot réponde deux fois
+            hein = True
    
    #check if a message contain "feur" and send a message
    for i in data['answers_quoi']:
@@ -177,13 +182,28 @@ async def on_message(message):
          # si le dev mode est activé et que l'utilisateur n'a pas le role "dev", le bot ne répond pas
          if 'dev' not in [role.name.lower() for role in message.author.roles] and args.mode == 1:
             return
-         # sinon, le bot répond
-         # await message.add_reaction(':joy_cat:')
-         # assuming you have a message object named 'message'
-         await message.add_reaction('🙀')
-         await message.reply("masterclass akhy :joy_cat:")
-         return # on sort de la fonction pour éviter que le bot réponde deux fois
+         feur = True
 
+   if quoi and feur:
+      await message.reply("Masterclass, mais mange quand même ton feur :joy_cat:")
+      return
+   
+   elif quoi:
+      await message.reply(random.choice(data['answers_quoi']) + " :joy_cat:")
+      return # on sort de la fonction pour éviter que le bot réponde deux fois
+   
+   elif qui:
+      await message.reply("quette :joy_cat:")
+      return
+   
+   elif hein:
+      await message.reply(random.choice(data['answers_hein']) + " :joy_cat:")
+      return
+   
+   elif feur:
+      await message.add_reaction('🙀')
+      await message.reply("masterclass akhy :joy_cat:")
+      return # on sort de la fonction pour éviter que le bot réponde deux fois 
    
    # regarde si le message est une commande
    await bot.process_commands(message)

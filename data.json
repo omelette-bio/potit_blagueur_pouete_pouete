@@ -1,18 +1,24 @@
 {
   "possible_quoi": ["quoi","quoient","koi","koient", "qwa","qwaent"],
   "answers_quoi": ["feur", "feuse", "fure", "drilatère", "driceps","quoicoubeh"],
+
   "possible_qui": ["qui", "qui ?", "qui?", "ki", "ki ?", "ki?"],
+
   "possible_hein": ["hein", "hein ?", "hein?"],
   "answers_hein": ["deux, prends ta bite et fais un noeud", "deux", "deux, déshabille-toi et suce ma queue"],
+
   "emojis": [":rofl:", " :sunglasses:", " :fire:", " :joy:", " :joy_cat:", " :see_no_evil:", " :zany_face:"],
+
   "formulations": {
-    "c'est quoi ça": "c'est feur ça",
+    "c'est quoi ça": ["c'est feur ça","moi jpense que c'est feuuuur"],
     "quoique": "feurque"
   },
+
   "cmds": {
     "/blague_beauf": "renvoie une blague beauf",
     "/humour_noir": "renvoie une blague humour noir",
     "/help": "renvoie la liste des commandes"
   },
+
   "punct": [".", "!", "?", ",", ";", ":"] 
 }
