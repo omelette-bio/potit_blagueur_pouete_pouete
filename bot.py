@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import os, discord, random, argparse
 from blagues_api import BlaguesAPI, BlagueType
 from discord.ext import commands
