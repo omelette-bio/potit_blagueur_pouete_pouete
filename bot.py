@@ -44,7 +44,7 @@ def keyword_in_msg(msg, keyword):
       if msg[-1] == i:
          return True
       elif len(msg)>1 and i in msg[-2] and all_char_punct(msg[-1]):
-            return True
+         return True
 
 async def send_joke(ctx, type):
    if cant_write_in_dev(ctx):
