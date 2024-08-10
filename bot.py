@@ -4,11 +4,6 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import re
 
-# récupère le mode de lancement du bot
-parser = argparse.ArgumentParser()
-parser.add_argument('-m', '--mode', type=int, default=0, help='Mode de lancement du bot, 1: dev, autre: public')
-args = parser.parse_args()
-
 # charge les variables d'environnement
 load_dotenv()
 
@@ -20,30 +15,10 @@ with open('data.json') as json_file:
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='/', intents=intents, help_command=None)
-
+reactions_id = {1 : "quoi", 2 : "qui", 3 : "hein"}
 
 # initialise l'API de blagues
 # blagues = BlaguesAPI(os.getenv('BLAGUES_API_TOKEN'))
-
-# function to check if all characters in a string are punctuation
-def all_char_punct(str):
-    all = True
-    for i in str:
-        if i not in data['punct']:
-            all = False
-    return all
-
-
-# def cant_write_in_dev(ctx):
-#    return 'dev' not in [role.name.lower() for role in ctx.author.roles] and args.mode == 1
-
-
-def keyword_in_msg(msg, keyword):
-    assert type(msg) == list
-    for i in data['possible_' + keyword]:
-        if msg[-1] == i:
-            return True
-
 
 # async def send_joke(ctx, type):
 #    if cant_write_in_dev(ctx):
@@ -56,7 +31,7 @@ def keyword_in_msg(msg, keyword):
 # display a message when the bot is ready and indicate the mode of the bot
 @bot.event
 async def on_ready():
-    print(f'{bot.user.name} has connected to Discord in public mode !')
+    print(f'{bot.user.name} has connected to Discord !')
 
 
 # commande qui affiche une blague beauf
@@ -65,24 +40,9 @@ async def on_ready():
 #    await send_joke(ctx, BlagueType.BEAUF)
 
 # commande qui affiche une blague humour noir
-@bot.command(name='humour_noir')
+# @bot.command(name='humour_noir')
 # async def humour_noir(ctx):
 #    await send_joke(ctx, BlagueType.HUMOUR_NOIR)
-
-# commande qui permet de changer le mode du bot, de dev à public et vice versa
-# @bot.command(name='toggle_dev')
-# async def toggle_dev(ctx):
-#    # si l'utilisateur a le role "dev", on change le mode du bot
-#    if 'dev' in [role.name.lower() for role in ctx.author.roles]:
-#       if args.mode == 1:
-#          args.mode = 2
-#          await ctx.send("le bot est maintenant en mode public")
-#       else:
-#          args.mode = 1
-#          await ctx.send("le bot est maintenant en mode dev")
-#    # sinon, on ne fait rien
-#    else:
-#       await ctx.send("tu n'as pas le droit de faire ça, t'es pas dev :joy_cat:")
 
 # commande qui affiche la liste des commandes
 # @bot.command(name='help')
@@ -99,6 +59,34 @@ async def on_ready():
 #       msg += "je connais aussi d'autres choses mais je ne vais rien dévoiler ;)```"
 #       await ctx.send(msg)
 
+def keyword_in_msg(msg, keyword):
+    assert type(msg) == list
+    for i in data['possible_' + keyword]:
+        if msg[-1] == i:
+            return True
+
+# va renvoyer tout un tas d'informations, sous la forme d'un tuple, avec un booleen pour le cas ou feur est dans le mot
+# et un id pour le message a renvoyer (0 pour rien, 1 pour quoi, 2 pour qui, 3 pour hein) (idrep)
+def get_message_data(msg: list):
+    assert type(msg) is list
+    match msg[-1]:
+        case 'quoi':
+            idrep = 1
+        case 'qui':
+            idrep = 2
+        case 'hein':
+            idrep = 3
+        case _:
+            idrep = 0
+    joined_msg = " ".join(msg)
+    i = 0
+    hasfeur = False
+    while i < len(data['answers_quoi']) and hasfeur == False:
+        hasfeur = re.search(data['answers_quoi'][i], joined_msg) is not None
+        i = i + 1
+
+    return (hasfeur, idrep)
+
 # partie qui permet au bot de répondre à certains messages
 @bot.event
 async def on_message(message):
@@ -110,22 +98,32 @@ async def on_message(message):
     msg = [s for s in re.split("\W", message.content.lower()) if len(s) > 1]
     keywords = ['quoi', 'qui', 'hein']
 
-    for keyword in keywords:
-        if keyword_in_msg(msg, keyword):
-            await message.reply(random.choice(data['answers_' + keyword]) + " :joy_cat:")
-            return
+    (feur, id_rep) = get_message_data(msg);
 
-    # check if a message contain "feur" and send a message
-    for i in data['answers_quoi']:
-        if i in message.content.lower():
-            await message.add_reaction('🙀')
-            await message.reply("masterclass akhy :joy_cat:")
-            return  # on sort de la fonction pour éviter que le bot réponde deux fois
+    if feur :
+        await message.add_reaction('🙀')
+        await message.reply("masterclass akhy :joy_cat:")
+        return
 
-    for ans in data['formulations']:
-        if ans in message.content.lower():
-            await message.reply(data["formulations"][ans] + " :joy_cat:")
-            return  # on sort de la fonction pour éviter que le bot réponde deux fois
+    if id_rep > 0:
+        await message.reply(random.choice(data['answers_' + reactions_id[id_rep]]) + " :joy_cat:")
+        return
+    # for keyword in keywords:
+    #     if keyword_in_msg(msg, keyword):
+    #         await message.reply(random.choice(data['answers_' + keyword]) + " :joy_cat:")
+    #         return
+    #
+    # # check if a message contain "feur" and send a message
+    # for i in data['answers_quoi']:
+    #     if i in message.content.lower():
+    #         await message.add_reaction('🙀')
+    #         await message.reply("masterclass akhy :joy_cat:")
+    #         return  # on sort de la fonction pour éviter que le bot réponde deux fois
+    #
+    # for ans in data['formulations']:
+    #     if ans in message.content.lower():
+    #         await message.reply(data["formulations"][ans] + " :joy_cat:")
+    #         return  # on sort de la fonction pour éviter que le bot réponde deux fois
 
     # regarde si le message est une commande
     await bot.process_commands(message)
